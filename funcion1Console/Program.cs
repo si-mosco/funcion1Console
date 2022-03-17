@@ -11,12 +11,17 @@ namespace funcion1Console
         static void Main(string[] args)
         {
             string funzione;
-            int[] PezziFunzione = new int[100];
-            string[] SingoliPezziFunzione = new string[100];
-            int indice = 1, contatore1=0,aumento=0;
-            bool[] x = new bool[100];
-            bool[] x2 = new bool[100];
-            string[] elevazioni= new string[100];
+            int[] PezziFunzione = new int[100]; //salva posizione in cui si trova operatore
+            string[] SingoliPezziFunzione = new string[100]; //singoli numeri
+            int indice = 1, contatore1 = 0, aumento = 0;
+            int[] coefficenti = new int[100]; //coefficenti delle x
+            int[] esponenti = new int[100]; //esponenti delle x
+
+            for (int i = 0; i < coefficenti.Length; i++)//pongo tutti i possibili coefficenti pari a 1, quindi come inesistenti
+            {
+                esponenti[i] = 1;
+                coefficenti[i] = 1;
+            }
 
             funzione = Console.ReadLine();
             PezziFunzione[0] = 0;
@@ -38,34 +43,47 @@ namespace funcion1Console
             {
                 if (contatore1 > 0)
                     aumento = 1;
-                SingoliPezziFunzione[contatore1] = funzione.Substring(PezziFunzione[contatore1]+aumento, (PezziFunzione[contatore1 + 1] - PezziFunzione[contatore1]-aumento));
+                //SingoliPezziFunzione[contatore1]=" ";
+                SingoliPezziFunzione[contatore1] /*+*/= funzione.Substring(PezziFunzione[contatore1] + aumento, (PezziFunzione[contatore1 + 1] - PezziFunzione[contatore1] - aumento));
+                SingoliPezziFunzione[contatore1] += " ";
                 contatore1++;
             }
-            
-            for (int i=0; i<SingoliPezziFunzione.Length; i++)//per ogni parola, confronto ogni lettera se uguale a x (presente=vero| non presente=falso)
+
+            for (int i = 0; i < contatore1; i++)
             {
-                for (int j=0; j<SingoliPezziFunzione[i].Length; j++)
-                {
-                    if (SingoliPezziFunzione[i].Substring(j,1).ToUpper()=="X")
-                    {
-                        x[i]=true;
-                    }
-                }
-                for (int j=0; j<SingoliPezziFunzione[i].Length-1; j++)
+                for (int j = 0; j < SingoliPezziFunzione[i].Length - 1; j++) //cerco l'incognita x in ogni pezzo di funzione
                 {
                     if (SingoliPezziFunzione[i].Substring(j, 2).ToUpper() == "X^")
                     {
-                        x2[i] = true;
-                        elevazioni[i]=SingoliPezziFunzione[i].Substring(j, (PezziFunzione[i + 1] - PezziFunzione[i] - 1));
-                        Console.WriteLine("elevazione"+ i+1);
-                        Console.WriteLine(elevazioni[i]);
+                        esponenti[i] = int.Parse(SingoliPezziFunzione[i].Substring(j + 2, SingoliPezziFunzione[i].Length - (j + 2))); //prendiamo l'esponente quindi se la sottostringa è uguale a "x^" sappiamo che dovremo salvarci nell'array l'elezione
+                            coefficenti[i] = int.Parse(SingoliPezziFunzione[i].Substring(0, j));
+                        j = SingoliPezziFunzione[i].Length; //mettiamo questo così esce da for
+                    }
+                    else if (SingoliPezziFunzione[i].Substring(j, 2).ToUpper() != "X^") //se non è elevato con la "^" allora
+                    {
+                        esponenti[i] =0; //nel dubbio poniamolo =0
+                        //Console.WriteLine("Ciao"+i);
+                        //Console.ReadKey();
+                        if (SingoliPezziFunzione[i].Substring(j, 1).ToUpper() == "X") //se invece è presente la x allora cambiamo l'esponete in 
+                        {
+                            esponenti[i] = 1;
+                            if (j > 1)
+                                coefficenti[i] = int.Parse(SingoliPezziFunzione[i].Substring(0, j));
+                            j = SingoliPezziFunzione[i].Length;
+                        }
+                        else
+                        {
+                            if (j == SingoliPezziFunzione[i].Length - 2)
+                                coefficenti[i] = int.Parse(SingoliPezziFunzione[i].Substring(0, SingoliPezziFunzione[i].Length-1));
+                        }
                     }
                 }
+
             }
 
-            for (int i=0; i<10; i++)
+            for (int i = 0; i < contatore1; i++) //stampa pezzo - esponente - coefficente
             {
-                Console.WriteLine(SingoliPezziFunzione[i]);
+                Console.WriteLine($"{SingoliPezziFunzione[i]} \t {esponenti[i]} \t {coefficenti[i]}");
             }
             Console.ReadKey();
         }
