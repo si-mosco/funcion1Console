@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
 
 namespace funcion1Console
 {
@@ -16,6 +17,16 @@ namespace funcion1Console
             int indice = 1, contatore1 = 0, aumento = 0;
             int[] coefficenti = new int[100]; //coefficenti delle x
             int[] esponenti = new int[100]; //esponenti delle x
+            decimal[,] coordinata = new decimal[2,10];
+
+            string ciao="cos(2+6)*3";
+            //nt ooo = int.Parse(ciao);
+
+            DataTable dt = new DataTable();
+            var v = dt.Compute(ciao, "");
+
+            Console.WriteLine(v);
+            Console.ReadKey();
 
             for (int i = 0; i < coefficenti.Length; i++)//pongo tutti i possibili coefficenti pari a 1, quindi come inesistenti
             {
@@ -78,8 +89,12 @@ namespace funcion1Console
                         }
                     }
                 }
-
             }
+
+            /*for (int i = 0; i < 10; i++)
+            {
+
+            }*/
 
             for (int i = 0; i < contatore1; i++) //stampa pezzo - esponente - coefficente
             {
@@ -89,3 +104,4 @@ namespace funcion1Console
         }
     }
 }
+
