@@ -19,7 +19,7 @@ namespace funcion1Console
             int[] coefficenti = new int[100]; //coefficenti delle x
             int[] esponenti = new int[100]; //esponenti delle x
             decimal[,] coordinata = new decimal[2, 10];
-            int x = 1;
+            int x = 0;
 
             string[] SingoliPezziFunzioneBackup = new string[100];
 
@@ -93,13 +93,20 @@ namespace funcion1Console
                 }
             }
             
-            SingoliPezziFunzioneBackup=SingoliPezziFunzione;
+            for (int i = 0; i < 100; i++)
+            {
+                SingoliPezziFunzioneBackup[i] = SingoliPezziFunzione[i];
+            }
+            
 
 
             while (x<10)//troviamo le coordinate di alcuni punti appartenenti alla funzione
             {
                 SommaBackup = "";
-                SingoliPezziFunzione = SingoliPezziFunzioneBackup;//ripristina pezzi originari
+                for (int i = 0; i < 100; i++)
+                {
+                    SingoliPezziFunzione[i] = SingoliPezziFunzioneBackup[i]; //ripristina i valori originali
+                }
                 coordinata[0, x] = x;
 
                 for (int i = 0; i < /*SingoliPezziFunzione.Length*/contatore1; i++)
@@ -112,7 +119,8 @@ namespace funcion1Console
                             SingoliPezziFunzione[i] = SingoliPezziFunzione[i].Remove(j, 1);
                             for (int p = 0; p < esponenti[i]; p++)
                             {
-                                SingoliPezziFunzione[i] += $"*{x}";
+                                SingoliPezziFunzione[i] += "*";
+                                SingoliPezziFunzione[i] += x;
                             }
                         }
                     }
@@ -121,10 +129,7 @@ namespace funcion1Console
                 {
                     SommaBackup += funzione.Substring(PezziFunzione[i], 1)+SingoliPezziFunzione[i];
                 }
-
                 Console.WriteLine(SommaBackup);
-                Console.ReadKey();
-
                 DataTable dt = new DataTable();
                 var yy = dt.Compute(SommaBackup, "");
                 decimal y=Convert.ToDecimal(yy);
@@ -132,13 +137,15 @@ namespace funcion1Console
 
                 x++;
             }
-            
 
-            for (int i = 0; i < contatore1; i++) //stampa pezzo - esponente - coefficente
+            for (int i = 0; i < 1; i++)
             {
-                Console.WriteLine($"{SingoliPezziFunzione[i]} \t {esponenti[i]} \t {coefficenti[i]}");
+                for(int j=0;j<10;j++)
+                {
+                    Console.WriteLine("x=" + coordinata[0, j] + " y=" + coordinata[1, j]);
+                }
+                Console.WriteLine();
             }
-            Console.ReadKey();
         }
     }
 }
