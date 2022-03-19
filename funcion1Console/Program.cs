@@ -12,6 +12,7 @@ namespace funcion1Console
         static void Main(string[] args)
         {
             string funzione;
+            //ciao 
             int[] PezziFunzione = new int[100]; //salva posizione in cui si trova operatore
             string[] SingoliPezziFunzione = new string[100]; //singoli numeri
             int indice = 1, contatore1 = 0, aumento = 0;
