@@ -30,7 +30,7 @@ namespace funcion1Console
             int indice = 1, /*contatore1=0;*/ aumento = 0;
             //int[] coefficenti = new int[100]; //coefficenti delle x
             //int[] esponenti = new int[100]; //esponenti delle x
-            double[,] coordinata = new double[2, 10];
+            double[,] coordinata = new double[2, 1000];
             /*int x = 0;*/
             //string[] SingoliPezziFunzioneBackup = new string[100];
 
@@ -68,9 +68,9 @@ namespace funcion1Console
 
             for (int i = 0; i < 1; i++)//stampa le coordinate
             {
-                for(int j=0;j<10;j++)
+                for(int j=0;j<1000;j++)
                 {
-                    Console.WriteLine("x=" + coordinata[0, j] + "\t y=" + coordinata[1, j]);
+                    Console.WriteLine("x=" + coordinata[0, j] + "\t \t  y=" + coordinata[1, j]);
                 }
                 Console.WriteLine();
             }
@@ -142,7 +142,7 @@ namespace funcion1Console
             double x = 0;
             int contatore=0;
             string SommaBackup = "";
-            while (contatore < 10)//troviamo le coordinate di alcuni punti appartenenti alla funzione
+            while (contatore < 1000)//troviamo le coordinate di alcuni punti appartenenti alla funzione
             {
                 SommaBackup = "";
                 for (int i = 0; i < 100; i++)
