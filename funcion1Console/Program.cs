@@ -193,7 +193,9 @@ namespace funcion1Console
                         else if (j< Funzione.SingoliPezziFunzione[i].Length-1 && Funzione.SingoliPezziFunzione[i].Substring(j+1, 1)=="^")
                         {
                             Funzione.SingoliPezziFunzione[i] = Regex.Replace(Funzione.SingoliPezziFunzione[i], "[m,^]", string.Empty);
-                            Funzione.SingoliPezziFunzione[i] = Funzione.SingoliPezziFunzione[i].Remove(j, 1);
+                            Funzione.SingoliPezziFunzione[i] = Funzione.SingoliPezziFunzione[i].Remove(j+1, 1);
+                            Console.WriteLine(Funzione.SingoliPezziFunzione[i]);
+                            Console.ReadKey();
                             string SingoloPezzoFunzione = Funzione.SingoliPezziFunzione[i];
                             for (int p = 0; p < Funzione.esponenti[i]-1; p++)
                             {
