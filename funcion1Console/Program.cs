@@ -18,21 +18,16 @@ namespace funcion1Console
             public string[] SingoliPezziFunzioneBackup;
             public int[] coefficenti;
             public int[] esponenti;
+            public string[] TondeAperte;
+            public string[] TondeChiuse;
         }
 
         static void Main(string[] args)
         {
 
             SuddivisioneFunzione FUNZIONE;
-            /*string funzione, SommaBackup="";*/
-            //int[] PezziFunzione = new int[100]; //salva posizione in cui si trova operatore
-            //string[] SingoliPezziFunzione = new string[100]; //singoli numeri
-            int indice = 1, /*contatore1=0;*/ aumento = 0;
-            //int[] coefficenti = new int[100]; //coefficenti delle x
-            //int[] esponenti = new int[100]; //esponenti delle x
+            int indice = 1, aumento = 0;
             double[,] coordinata = new double[2, 1000];
-            /*int x = 0;*/
-            //string[] SingoliPezziFunzioneBackup = new string[100];
 
             FUNZIONE.SingoliPezziFunzione = new string[100];
             FUNZIONE.PezziFunzione = new int[100];
@@ -40,6 +35,8 @@ namespace funcion1Console
             FUNZIONE.SingoliPezziFunzioneBackup = new string[100];
             FUNZIONE.coefficenti = new int [100];
             FUNZIONE.esponenti = new int [100];
+            FUNZIONE.TondeAperte = new string[100];
+            FUNZIONE.TondeChiuse = new string[100];
 
 
 
@@ -55,6 +52,11 @@ namespace funcion1Console
             IndividuazioneOperatori(FUNZIONE, ref indice);
             
             SuddivisioneSottostringhe(FUNZIONE, indice);
+            for (int i=0;i<10;i++)
+            {
+                Console.WriteLine(FUNZIONE.SingoliPezziFunzione[i]);
+            }
+            Console.ReadKey();
 
             IndividuazioneCoefficentiEsponenti(FUNZIONE, indice);
 
@@ -97,10 +99,24 @@ namespace funcion1Console
             {
                 if (contatore > 0)
                     aumento = 1;
-                //SingoliPezziFunzione[contatore1]=" ";
                 Funzione.SingoliPezziFunzione[contatore] = Funzione.funzione.Substring(Funzione.PezziFunzione[contatore] + aumento, (Funzione.PezziFunzione[contatore + 1] - Funzione.PezziFunzione[contatore] - aumento));
                 //qui uso la variabile aumento perchè sennò nella sottostringa ci sarebbe acnhe l'operatore
                 Funzione.SingoliPezziFunzione[contatore] += " ";
+
+                for (int j = 0; j < Funzione.SingoliPezziFunzione[contatore].Length; j++)
+                {
+                    if (Funzione.SingoliPezziFunzione[contatore].Substring(j, 1).ToUpper() == "(")
+                    {
+                        Funzione.TondeAperte[contatore] = "(";
+                        Funzione.SingoliPezziFunzione[contatore] = Funzione.SingoliPezziFunzione[contatore].Remove(j, 1);
+                    }
+                    else if (Funzione.SingoliPezziFunzione[contatore].Substring(j, 1).ToUpper() == ")")
+                    {
+                        Funzione.TondeChiuse[contatore] = ")";
+                        Funzione.SingoliPezziFunzione[contatore] = Funzione.SingoliPezziFunzione[contatore].Remove(j, 1);
+                    }
+                }
+
                 contatore++;
             }
         }
@@ -140,6 +156,7 @@ namespace funcion1Console
         public static void IndividuazioneCoordinate (SuddivisioneFunzione Funzione, int Indice, double[,] MatriceCoordinate)//trovo i coefficenti e gli esponenti
         {
             double x = 0;
+            double y;
             int contatore=0;
             string SommaBackup = "";
             while (contatore < 1000)//troviamo le coordinate di alcuni punti appartenenti alla funzione
@@ -170,20 +187,24 @@ namespace funcion1Console
                 }
                 for (int i = 0; i < Indice; i++)
                 {
-                    SommaBackup += Funzione.funzione.Substring(Funzione.PezziFunzione[i], 1) + Funzione.SingoliPezziFunzione[i];
+                    SommaBackup += Funzione.funzione.Substring(Funzione.PezziFunzione[i], 1) + Funzione.TondeAperte[i] + Funzione.SingoliPezziFunzione[i]+Funzione.TondeChiuse[i];
                 }
 
-                DataTable dt = new DataTable();
-                var yy = dt.Compute(SommaBackup, "");
-                double y = Convert.ToDouble(yy);
+                y = Risoluzione (SommaBackup);
                 MatriceCoordinate[1, contatore] = y;
 
                 contatore++;
-                x+=0.25;
+                x+=1;
             }
         }
 
-        
+        public static double Risoluzione (string Funzione)
+        {
+            DataTable dt = new DataTable();
+            var soluzione1 = dt.Compute(Funzione, "");
+            double soluzione2 = Convert.ToDouble(soluzione1);
+            return soluzione2;
+        }
 
         
     }
