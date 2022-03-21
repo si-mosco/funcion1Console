@@ -105,7 +105,7 @@ namespace funcion1Console
 
                 for (int j = 0; j < Funzione.SingoliPezziFunzione[contatore].Length; j++)
                 {
-                    if (Funzione.SingoliPezziFunzione[contatore].Substring(j, 1).ToUpper() == "(")
+                    if (Funzione.SingoliPezziFunzione[contatore].Substring(j, 1).ToUpper() == "(") //se trova una tonda aperta la salva in un array in cui mi segno con l'indice la poszione in cui si trova la tonda
                     {
                         Funzione.TondeAperte[contatore] = "(";
                         Funzione.SingoliPezziFunzione[contatore] = Funzione.SingoliPezziFunzione[contatore].Remove(j, 1);
@@ -192,11 +192,9 @@ namespace funcion1Console
                         }
                         else if (j< Funzione.SingoliPezziFunzione[i].Length-1 && Funzione.SingoliPezziFunzione[i].Substring(j+1, 1)=="^")
                         {
-                            Funzione.SingoliPezziFunzione[i] = Regex.Replace(Funzione.SingoliPezziFunzione[i], "[m,^]", string.Empty);
+                            Funzione.SingoliPezziFunzione[i] = Regex.Replace(Funzione.SingoliPezziFunzione[i], "[m,^]", string.Empty);//stesso procedimento di prima per elevazione di una cifra normale
                             Funzione.SingoliPezziFunzione[i] = Funzione.SingoliPezziFunzione[i].Remove(j+1, 1);
-                            Console.WriteLine(Funzione.SingoliPezziFunzione[i]);
-                            Console.ReadKey();
-                            string SingoloPezzoFunzione = Funzione.SingoliPezziFunzione[i];
+                            string SingoloPezzoFunzione = Funzione.SingoliPezziFunzione[i]; //salviamo in una variabile di backup il numero da continuare a elevare
                             for (int p = 0; p < Funzione.esponenti[i]-1; p++)
                             {
                                 Funzione.SingoliPezziFunzione[i] += "*";
@@ -212,7 +210,7 @@ namespace funcion1Console
                 }
 
                 Console.WriteLine(SommaBackup);
-                Console.ReadKey();
+                //Console.ReadKey();
 
                 y = Risoluzione (SommaBackup);
                 MatriceCoordinate[1, contatore] = y;
@@ -222,7 +220,7 @@ namespace funcion1Console
             }
         }
 
-        public static double Risoluzione (string Funzione)
+        public static double Risoluzione (string Funzione)//funzione per risolvere una espressione
         {
             DataTable dt = new DataTable();
             var soluzione1 = dt.Compute(Funzione, "");
