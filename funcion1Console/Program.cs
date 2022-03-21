@@ -26,7 +26,7 @@ namespace funcion1Console
         {
 
             SuddivisioneFunzione FUNZIONE;
-            int indice = 1, aumento = 0;
+            int indice = 1;
             double[,] coordinata = new double[2, 1000];
 
             FUNZIONE.SingoliPezziFunzione = new string[100];
@@ -70,7 +70,7 @@ namespace funcion1Console
 
             for (int i = 0; i < 1; i++)//stampa le coordinate
             {
-                for(int j=0;j<1000;j++)
+                for(int j=0;j<10;j++)
                 {
                     Console.WriteLine("x=" + coordinata[0, j] + "\t \t  y=" + coordinata[1, j]);
                 }
@@ -127,7 +127,7 @@ namespace funcion1Console
             {
                 for (int j = 0; j < Funzione.SingoliPezziFunzione[i].Length - 1; j++) //cerco l'incognita x in ogni pezzo di funzione
                 {
-                    if (Funzione.SingoliPezziFunzione[i].Substring(j, 2).ToUpper() == "X^")
+                    if (Funzione.SingoliPezziFunzione[i].Substring(j, 2).ToUpper() == "X^")//parte di x^
                     {
                         Funzione.esponenti[i] = int.Parse(Funzione.SingoliPezziFunzione[i].Substring(j + 2, Funzione.SingoliPezziFunzione[i].Length - (j + 2))); //prendiamo l'esponente quindi se la sottostringa è uguale a "x^" sappiamo che dovremo salvarci nell'array l'elezione
                         Funzione.coefficenti[i] = int.Parse(Funzione.SingoliPezziFunzione[i].Substring(0, j));
@@ -143,11 +143,18 @@ namespace funcion1Console
                                 Funzione.coefficenti[i] = int.Parse(Funzione.SingoliPezziFunzione[i].Substring(0, j));
                             j = Funzione.SingoliPezziFunzione[i].Length;
                         }
-                        else
+                        else if (Funzione.SingoliPezziFunzione[i].Substring(j, 1) == "^")
+                        {
+                            Funzione.esponenti[i] = int.Parse(Funzione.SingoliPezziFunzione[i].Substring(j + 1, Funzione.SingoliPezziFunzione[i].Length - (j + 1)));
+                            j = Funzione.SingoliPezziFunzione[i].Length;
+                        }
+                        /*else
                         {
                             if (j == Funzione.SingoliPezziFunzione[i].Length - 2)
                                 Funzione.coefficenti[i] = int.Parse(Funzione.SingoliPezziFunzione[i].Substring(0, Funzione.SingoliPezziFunzione[i].Length - 1));
-                        }
+                            Console.WriteLine(Funzione.coefficenti[i]);
+                            Console.ReadKey();
+                        }*/
                     }
                 }
             }
@@ -159,7 +166,7 @@ namespace funcion1Console
             double y;
             int contatore=0;
             string SommaBackup = "";
-            while (contatore < 1000)//troviamo le coordinate di alcuni punti appartenenti alla funzione
+            while (contatore < 10)//troviamo le coordinate di alcuni punti appartenenti alla funzione
             {
                 SommaBackup = "";
                 for (int i = 0; i < 100; i++)
@@ -183,12 +190,27 @@ namespace funcion1Console
                             }
                             Funzione.SingoliPezziFunzione[i] = Regex.Replace(Funzione.SingoliPezziFunzione[i], "[,]", ".");//bicos DataTable.Compute vuole il punto e non la virgola
                         }
+                        else if (j< Funzione.SingoliPezziFunzione[i].Length-1 && Funzione.SingoliPezziFunzione[i].Substring(j+1, 1)=="^")
+                        {
+                            Funzione.SingoliPezziFunzione[i] = Regex.Replace(Funzione.SingoliPezziFunzione[i], "[m,^]", string.Empty);
+                            Funzione.SingoliPezziFunzione[i] = Funzione.SingoliPezziFunzione[i].Remove(j, 1);
+                            string SingoloPezzoFunzione = Funzione.SingoliPezziFunzione[i];
+                            for (int p = 0; p < Funzione.esponenti[i]-1; p++)
+                            {
+                                Funzione.SingoliPezziFunzione[i] += "*";
+                                Funzione.SingoliPezziFunzione[i] += SingoloPezzoFunzione;
+                            }
+                            
+                        }
                     }
                 }
                 for (int i = 0; i < Indice; i++)
                 {
                     SommaBackup += Funzione.funzione.Substring(Funzione.PezziFunzione[i], 1) + Funzione.TondeAperte[i] + Funzione.SingoliPezziFunzione[i]+Funzione.TondeChiuse[i];
                 }
+
+                Console.WriteLine(SommaBackup);
+                Console.ReadKey();
 
                 y = Risoluzione (SommaBackup);
                 MatriceCoordinate[1, contatore] = y;
