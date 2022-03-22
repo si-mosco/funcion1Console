@@ -244,8 +244,6 @@ namespace funcion1Console
                                 parentesi += Funzione.SingoliPezziFunzione[f];
                                 
                             }
-
-
                         }
                         AggiungiSegno++;
                         f++;
@@ -254,6 +252,8 @@ namespace funcion1Console
                     parentesi += Funzione.SingoliPezziFunzione[f];
                     indiceImportante = f;
                     f++;
+                    f++;//
+                    f++;//
                     parentesi += ")";
                     Funzione.TondeAperteChiuse[indiceImportante] = "";
                     Console.WriteLine("PARENTESI:" + parentesi);
