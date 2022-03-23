@@ -226,7 +226,7 @@ namespace funcion1Console
                 {
                     SommaBackup += Funzione.funzione.Substring(Funzione.PezziFunzione[i], 1) + Funzione.TondeAperte[i] + Funzione.SingoliPezziFunzione[i] + Funzione.TondeChiuse[i]+Funzione.TondeAperteChiuse[i];
                 }
-
+                Console.WriteLine("SOMMA:" + SommaBackup);
                 y = Risoluzione(SommaBackup);
                 MatriceCoordinate[1, contatore] = y;
 
@@ -246,11 +246,11 @@ namespace funcion1Console
         public static void ElevazioneTonde(SuddivisioneFunzione Funzione, int Indice)
         {
             int f = 0;
-            while (f < Indice-2)
+            while (f < Indice-3)
             {
                 string parentesi = "("; //inizializo la stringa con "("
                 int indiceImportante = 0, controllo = 0, AggiungiSegno = 0;
-                while (Funzione.TondeChiuse[f] != ")" && f < Indice) //se non trovo ")" e finchè resto minore delle posizioni occupate
+                while (Funzione.TondeChiuse[f] != ")" && f < Indice-3) //se non trovo ")" e finchè resto minore delle posizioni occupate
                 {
                     if (Funzione.TondeAperte[f] == "(") //prima controllo se trovo la tonda perchè se non la trovo non ha senso inserire nella stringa di salvataggio
                     {
