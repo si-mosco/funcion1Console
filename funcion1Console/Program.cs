@@ -53,6 +53,9 @@ namespace funcion1Console
             FUNZIONE.funzione += Console.ReadLine(); //prendo in input
             FUNZIONE.funzione = Parentesi(FUNZIONE);
 
+            Console.WriteLine("FUNZIONE"+FUNZIONE.funzione);
+            Console.ReadKey();
+
             IndividuazioneOperatori(FUNZIONE, ref indice);
 
             SuddivisioneSottostringhe(FUNZIONE, indice);
@@ -243,7 +246,7 @@ namespace funcion1Console
         public static void ElevazioneTonde(SuddivisioneFunzione Funzione, int Indice)
         {
             int f = 0;
-            while (f < Indice)
+            while (f < Indice-2)
             {
                 string parentesi = "("; //inizializo la stringa con "("
                 int indiceImportante = 0, controllo = 0, AggiungiSegno = 0;
@@ -287,7 +290,7 @@ namespace funcion1Console
          
         public static string Parentesi(SuddivisioneFunzione Funzione)
         {
-            string RisFin = "";
+            string RisFin = Funzione.funzione;
             Console.WriteLine("VECCHIA POSIZIONE:" + Funzione.funzione.Length);
             for (int i = 0; i < Funzione.funzione.Length; i++)
             {
