@@ -51,15 +51,17 @@ namespace funcion1Console
 
             FUNZIONE.funzione = " "; //aggiungo lo spazio all'inizio
             FUNZIONE.funzione += Console.ReadLine(); //prendo in input
+            FUNZIONE.funzione = Parentesi(FUNZIONE);
 
             IndividuazioneOperatori(FUNZIONE, ref indice);
 
             SuddivisioneSottostringhe(FUNZIONE, indice);
-            for (int i = 0; i < 10; i++)
+
+            for (int i = 0; i < indice; i++)
             {
                 Console.WriteLine(FUNZIONE.SingoliPezziFunzione[i]);
             }
-            Console.ReadKey();
+            //Console.ReadKey();
 
             IndividuazioneCoefficentiEsponenti(FUNZIONE, indice);
 
@@ -84,6 +86,7 @@ namespace funcion1Console
         public static void IndividuazioneOperatori(SuddivisioneFunzione Funzione, ref int Indice)//trovo la posizione degli operatori
         {
             Funzione.PezziFunzione[0] = 0; //assegno al primo pezzo del vettore la posizione 0
+            Console.WriteLine("NUOVA POSIZIONE:" + Funzione.funzione.Length);
             for (int i = 0; i < Funzione.funzione.Length; i++) //qui salviamo in un array le posizioni in cui stanno gli operatori
             {
                 if (Funzione.funzione.Substring(i, 1) == "+" || Funzione.funzione.Substring(i, 1) == "-" || Funzione.funzione.Substring(i, 1) == "*" || Funzione.funzione.Substring(i, 1) == "/")
@@ -93,10 +96,12 @@ namespace funcion1Console
                 }
             }
             Funzione.PezziFunzione[Indice] = Funzione.funzione.Length;
+            //Indice++;
         }
 
         public static void SuddivisioneSottostringhe(SuddivisioneFunzione Funzione, int Indice)
         {
+            //Console.WriteLine("ORA CHE ENTRO QUI È PARI A:"+Funzione.funzione);
             int contatore = 0, aumento = 0, indicatore = 0;
             while (contatore < Indice) //mi salvo in un array di stringe ogni sottostringa in cui ho suddiviso la mia funzione
             {
@@ -113,16 +118,12 @@ namespace funcion1Console
                         Funzione.InizioFineTonde[0, indicatore] = contatore;
                         Funzione.TondeAperte[contatore] = "(";
                         Funzione.SingoliPezziFunzione[contatore] = Funzione.SingoliPezziFunzione[contatore].Remove(j, 1);
-                        Console.WriteLine("Inizio: " + Funzione.InizioFineTonde[0, indicatore]);
-                        Console.ReadKey();
                     }
                     else if (Funzione.SingoliPezziFunzione[contatore].Substring(j, 1).ToUpper() == ")")
                     {
                         Funzione.InizioFineTonde[1, indicatore] = contatore;
                         Funzione.TondeChiuse[contatore] = ")";
                         Funzione.SingoliPezziFunzione[contatore] = Funzione.SingoliPezziFunzione[contatore].Remove(j, 1);
-                        Console.WriteLine("Fine: " + Funzione.InizioFineTonde[1, indicatore]);
-                        Console.ReadKey();
                         indicatore++;
                     }
                 }
@@ -155,16 +156,10 @@ namespace funcion1Console
                         }
                         else if (Funzione.SingoliPezziFunzione[i].Substring(j, 1) == "^")
                         {
+                            //Funzione.coefficenti[i] = int.Parse(Funzione.SingoliPezziFunzione[i].Substring(0, j));
                             Funzione.esponenti[i] = int.Parse(Funzione.SingoliPezziFunzione[i].Substring(j + 1, Funzione.SingoliPezziFunzione[i].Length - (j + 1)));
                             j = Funzione.SingoliPezziFunzione[i].Length;
                         }
-                        /*else
-                        {
-                            if (j == Funzione.SingoliPezziFunzione[i].Length - 2)
-                                Funzione.coefficenti[i] = int.Parse(Funzione.SingoliPezziFunzione[i].Substring(0, Funzione.SingoliPezziFunzione[i].Length - 1));
-                            Console.WriteLine(Funzione.coefficenti[i]);
-                            Console.ReadKey();
-                        }*/
                     }
                 }
             }
@@ -222,62 +217,12 @@ namespace funcion1Console
                     }
                 }
 
-                int f = 0;
-                while (f<Indice)
-                {
-                    string parentesi = "("; //inizializo la stringa con "("
-                    int indiceImportante = 0, controllo=0, AggiungiSegno=0;
-                    while (Funzione.TondeChiuse[f]!=")" && f<Indice) //se non trovo ")" e finchè resto minore delle posizioni occupate
-                    {
-                        if (Funzione.TondeAperte[f] == "(") //prima controllo se trovo la tonda perchè se non la trovo non ha senso inserire nella stringa di salvataggio
-                        {
-                            controllo = 1;
-                        }
-
-                        if (controllo == 1)
-                        {
-                            if (AggiungiSegno<1)
-                                parentesi += Funzione.SingoliPezziFunzione[f];
-                            else
-                            {
-                                parentesi += Funzione.funzione.Substring(Funzione.PezziFunzione[f], 1); //È SBAGLIATO QUESTO COMANDO E MI HA FATTO DANNARE
-                                parentesi += Funzione.SingoliPezziFunzione[f];
-                                
-                            }
-                        }
-                        AggiungiSegno++;
-                        f++;
-                    }
-                    parentesi += Funzione.funzione.Substring(Funzione.PezziFunzione[f], 1); //devo aggiungere ancora il segno
-                    parentesi += Funzione.SingoliPezziFunzione[f];
-                    indiceImportante = f;
-                    f++;
-                    f++;//
-                    f++;//
-                    parentesi += ")";
-                    Funzione.TondeAperteChiuse[indiceImportante] = "";
-                    Console.WriteLine("PARENTESI:" + parentesi);
-                    for (int u = 0; u < Funzione.esponenti[indiceImportante] - 1; u++)
-                    {
-                        Funzione.TondeAperteChiuse[indiceImportante] += "*";
-                        Funzione.TondeAperteChiuse[indiceImportante] += parentesi;
-                    }
-                    //Console.WriteLine("FUNZIONE:" + Funzione.TondeAperteChiuse[indiceImportante]);
-                }
-                
-
-
-
-
-
+                ElevazioneTonde(Funzione, Indice); 
 
                 for (int i = 0; i < Indice; i++)
                 {
                     SommaBackup += Funzione.funzione.Substring(Funzione.PezziFunzione[i], 1) + Funzione.TondeAperte[i] + Funzione.SingoliPezziFunzione[i] + Funzione.TondeChiuse[i]+Funzione.TondeAperteChiuse[i];
                 }
-
-                Console.WriteLine("SOMMA BACKUP"+SommaBackup);
-                //Console.ReadKey();
 
                 y = Risoluzione(SommaBackup);
                 MatriceCoordinate[1, contatore] = y;
@@ -295,6 +240,66 @@ namespace funcion1Console
             return soluzione2;
         }
 
+        public static void ElevazioneTonde(SuddivisioneFunzione Funzione, int Indice)
+        {
+            int f = 0;
+            while (f < Indice)
+            {
+                string parentesi = "("; //inizializo la stringa con "("
+                int indiceImportante = 0, controllo = 0, AggiungiSegno = 0;
+                while (Funzione.TondeChiuse[f] != ")" && f < Indice) //se non trovo ")" e finchè resto minore delle posizioni occupate
+                {
+                    if (Funzione.TondeAperte[f] == "(") //prima controllo se trovo la tonda perchè se non la trovo non ha senso inserire nella stringa di salvataggio
+                    {
+                        controllo = 1;
+                    }
+
+                    if (controllo == 1)
+                    {
+                        if (AggiungiSegno < 1)
+                            parentesi += Funzione.SingoliPezziFunzione[f];
+                        else
+                        {
+                            parentesi += Funzione.funzione.Substring(Funzione.PezziFunzione[f], 1); //È SBAGLIATO QUESTO COMANDO E MI HA FATTO DANNARE
+                            parentesi += Funzione.SingoliPezziFunzione[f];
+
+                        }
+                    }
+                    AggiungiSegno++;
+                    f++;
+                }
+                parentesi += Funzione.funzione.Substring(Funzione.PezziFunzione[f], 1); //devo aggiungere ancora il segno
+                parentesi += Funzione.SingoliPezziFunzione[f];
+                indiceImportante = f;
+                f++;
+                f++;//
+                f++;//
+                parentesi += ")";
+                Funzione.TondeAperteChiuse[indiceImportante] = "";
+                Console.WriteLine("PARENTESI:" + parentesi);
+                for (int u = 0; u < Funzione.esponenti[indiceImportante] - 1; u++)
+                {
+                    Funzione.TondeAperteChiuse[indiceImportante] += "*";
+                    Funzione.TondeAperteChiuse[indiceImportante] += parentesi;
+                }
+            }
+        }
+         
+        public static string Parentesi(SuddivisioneFunzione Funzione)
+        {
+            string RisFin = "";
+            Console.WriteLine("VECCHIA POSIZIONE:" + Funzione.funzione.Length);
+            for (int i = 0; i < Funzione.funzione.Length; i++)
+            {
+                if (Funzione.funzione.Substring(i, 1) == ")")
+                {
+                    RisFin = Funzione.funzione.Insert(i, "+0");
+                    i += 2;
+                    Funzione.funzione = RisFin;
+                }
+            }
+            return RisFin;
+        }
 
     }
 }
