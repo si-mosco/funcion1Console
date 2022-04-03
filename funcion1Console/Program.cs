@@ -51,10 +51,13 @@ namespace funcion1Console
 
             FUNZIONE.funzione = " "; //aggiungo lo spazio all'inizio
             FUNZIONE.funzione += Console.ReadLine(); //prendo in input
+
+            FUNZIONE.funzione = DenominatoreParentesi(FUNZIONE); //aggiungo le parentesi al denominatore nel caso in cu non ci siano
+            Console.WriteLine($"FUNZIONE:{FUNZIONE.funzione}");
+
             FUNZIONE.funzione = Parentesi(FUNZIONE);
 
-            Console.WriteLine("FUNZIONE"+FUNZIONE.funzione);
-            Console.ReadKey();
+            Console.WriteLine("FUNZIONE" + FUNZIONE.funzione);
 
             IndividuazioneOperatori(FUNZIONE, ref indice);
 
@@ -78,7 +81,7 @@ namespace funcion1Console
 
             for (int i = 0; i < 1; i++)//stampa le coordinate
             {
-                for (int j = 0; j < 10; j++)
+                for (int j = 0; j <= 100; j++)
                 {
                     Console.WriteLine("x=" + coordinata[0, j] + "\t \t  y=" + coordinata[1, j]);
                 }
@@ -170,11 +173,11 @@ namespace funcion1Console
 
         public static void IndividuazioneCoordinate(SuddivisioneFunzione Funzione, int Indice, double[,] MatriceCoordinate)//trovo i coefficenti e gli esponenti
         {
-            double x = 0;
+            double x = -50;
             double y;
             int contatore = 0;
             string SommaBackup = "";
-            while (contatore < 10)//troviamo le coordinate di alcuni punti appartenenti alla funzione
+            while (contatore < 100)//troviamo le coordinate di alcuni punti appartenenti alla funzione
             {
                 SommaBackup = "";
                 for (int i = 0; i < 100; i++) //quando lo rifai con la x diversa te la ripristina
@@ -220,11 +223,11 @@ namespace funcion1Console
                     }
                 }
 
-                ElevazioneTonde(Funzione, Indice); 
+                ElevazioneTonde(Funzione, Indice);
 
                 for (int i = 0; i < Indice; i++)
                 {
-                    SommaBackup += Funzione.funzione.Substring(Funzione.PezziFunzione[i], 1) + Funzione.TondeAperte[i] + Funzione.SingoliPezziFunzione[i] + Funzione.TondeChiuse[i]+Funzione.TondeAperteChiuse[i];
+                    SommaBackup += Funzione.funzione.Substring(Funzione.PezziFunzione[i], 1) + Funzione.TondeAperte[i] + Funzione.SingoliPezziFunzione[i] + Funzione.TondeChiuse[i] + Funzione.TondeAperteChiuse[i];
                 }
                 Console.WriteLine("SOMMA:" + SommaBackup);
                 y = Risoluzione(SommaBackup);
@@ -246,11 +249,11 @@ namespace funcion1Console
         public static void ElevazioneTonde(SuddivisioneFunzione Funzione, int Indice)
         {
             int f = 0;
-            while (f < Indice-3)
+            while (f < Indice - 3)
             {
                 string parentesi = "("; //inizializo la stringa con "("
                 int indiceImportante = 0, controllo = 0, AggiungiSegno = 0;
-                while (Funzione.TondeChiuse[f] != ")" && f < Indice-3) //se non trovo ")" e finchè resto minore delle posizioni occupate
+                while (Funzione.TondeChiuse[f] != ")" && f < Indice - 3) //se non trovo ")" e finchè resto minore delle posizioni occupate
                 {
                     if (Funzione.TondeAperte[f] == "(") //prima controllo se trovo la tonda perchè se non la trovo non ha senso inserire nella stringa di salvataggio
                     {
@@ -287,16 +290,50 @@ namespace funcion1Console
                 }
             }
         }
-         
-        public static string Parentesi(SuddivisioneFunzione Funzione)
+
+        public static string Parentesi(SuddivisioneFunzione Funzione) //aggiungiamo un +0 prima della chiusera di ogni parentesi
         {
             string RisFin = Funzione.funzione;
-            Console.WriteLine("VECCHIA POSIZIONE:" + Funzione.funzione.Length);
             for (int i = 0; i < Funzione.funzione.Length; i++)
             {
                 if (Funzione.funzione.Substring(i, 1) == ")")
                 {
                     RisFin = Funzione.funzione.Insert(i, "+0");
+                    i += 2;
+                    Funzione.funzione = RisFin;
+                }
+            }
+            return RisFin;
+        }
+
+        public static string DenominatoreParentesi(SuddivisioneFunzione Funzione) //aggiungiamo un +0 prima della chiusera di ogni parentesi
+        {
+            string RisFin = Funzione.funzione;
+            Console.WriteLine("VECCHIA LUNGHEZZA DENOMINATORE PARENTESI:" + Funzione.funzione.Length);
+            for (int i = 0; i < Funzione.funzione.Length - 1; i++)
+            {
+                if (Funzione.funzione.Substring(i, 1) == "/" && Funzione.funzione.Substring(i + 1, 1) != "(") //se c'è denominatore e poi non c'è una tonda
+                {
+                    RisFin = Funzione.funzione.Insert(i + 1, "(");
+                    int k = 0;
+                    for (k = i + 1; k < Funzione.funzione.Length - 1; k++)
+                    {
+                        Funzione.funzione = RisFin;
+                        RisFin = Funzione.funzione;
+                        if (Funzione.funzione.Substring(k, 1) == "/" || Funzione.funzione.Substring(k, 1) == "+" ||
+                            Funzione.funzione.Substring(k, 1) == "-" || Funzione.funzione.Substring(k, 1) == "*")
+                        {
+                            Console.WriteLine($"K:{k} FUNZIONE:{Funzione.funzione}, VALORE:{Funzione.funzione.Substring(k, 1)}");
+                            RisFin = Funzione.funzione.Insert(k, ")");
+                            k = Funzione.funzione.Length + 1; //esc subito dalla funzione
+                        }
+                    }
+                    if (k != Funzione.funzione.Length + 2)
+                    {
+                        Funzione.funzione = RisFin;
+                        RisFin = Funzione.funzione;
+                        RisFin = Funzione.funzione.Insert(Funzione.funzione.Length, ")");
+                    }
                     i += 2;
                     Funzione.funzione = RisFin;
                 }
